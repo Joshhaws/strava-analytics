@@ -20,7 +20,7 @@ jobs:
 
       - name: Deploy to S3 (example)
         run: |
-          aws s3 sync ./ s3://stava-analytics-tge/project --delete
+          aws s3 sync ./ s3://strava-analytics-tge/project --delete
 
       - name: Notify on success
         run: echo "Deployment complete!"
