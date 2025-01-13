@@ -86,10 +86,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(user);
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+    }).catch((err) => console.error('Logout error:', err));
+
     localStorage.removeItem('token');
     setUser(null);
-  };
+    window.location.href = '/login'; // Redirect to login page
+};
 
   const handleStravaCallback = async (code: string) => {
     // Handle Strava callback to exchange code for token

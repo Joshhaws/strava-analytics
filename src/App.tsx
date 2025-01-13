@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { StravaProvider } from './contexts/StravaContext';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Data from './pages/Data';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
+import Login from './pages/Login';
 
 export default function App() {
   const [isStravaConnected, setIsStravaConnected] = useState(false);
@@ -14,6 +15,13 @@ export default function App() {
   useEffect(() => {
     checkStravaConnection();
   }, []); // Automatically runs once when the component mounts.
+
+  function PrivateRoute({ children }: { children: React.ReactNode }) {
+    const { user, loading } = useAuth();
+
+    if (loading) return <div>Loading...</div>; // Show a loading indicator while checking auth
+    return user ? <>{children}</> : <Navigate to="/login" />;
+  }
 
   async function checkStravaConnection() {
     try {
@@ -40,18 +48,20 @@ export default function App() {
       <StravaProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<div>Login Page</div>} />
+            <Route path="/login" element={<Login />} />
 
             <Route
               path="/"
               element={
-                <Layout
-                  isStravaConnected={isStravaConnected}
-                  onRefresh={refreshData}
-                  onConnect={connectStrava}
-                >
-                  <Outlet />
-                </Layout>
+                <PrivateRoute>
+                  <Layout
+                    isStravaConnected={isStravaConnected}
+                    onRefresh={refreshData}
+                    onConnect={connectStrava}
+                  >
+                    <Outlet />
+                  </Layout>
+                </PrivateRoute>
               }
             >
               <Route path="home" element={<Home />} />

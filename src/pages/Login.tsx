@@ -19,7 +19,7 @@ export default function Login() {
       } else {
         await signIn(email, password);
       }
-      navigate('/dashboard');
+      navigate('/home');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred');
     }

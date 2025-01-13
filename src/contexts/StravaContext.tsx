@@ -9,9 +9,19 @@ const StravaContext = createContext<StravaContextProps | undefined>(undefined);
 
 export const StravaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isStravaConnected, setIsStravaConnected] = useState(() => {
-    // Initialize from local storage
     const saved = localStorage.getItem('isStravaConnected');
-    return saved ? JSON.parse(saved) : false;
+
+    // Validate and parse the saved value
+    if (saved === null || saved === "undefined") {
+      return false;
+    }
+
+    try {
+      return JSON.parse(saved);
+    } catch (error) {
+      console.error('Invalid JSON in localStorage for isStravaConnected:', error);
+      return false; // Default to false on error
+    }
   });
 
   async function checkStravaConnection() {
@@ -19,10 +29,18 @@ export const StravaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const response = await fetch('http://localhost:3001/api/strava/connection', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       const data = await response.json();
-      setIsStravaConnected(data.connected);
-      // Persist the state
-      localStorage.setItem('isStravaConnected', JSON.stringify(data.connected));
+      if (data && typeof data.connected === 'boolean') {
+        setIsStravaConnected(data.connected);
+        localStorage.setItem('isStravaConnected', JSON.stringify(data.connected));
+      } else {
+        console.error('Unexpected API response:', data);
+      }
     } catch (error) {
       console.error('Error checking Strava connection:', error);
     }

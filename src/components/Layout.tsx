@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { HomeIcon, TableIcon, AnalyticsIcon, SettingsIcon } from './Icons';
 import TopNavBar from './TopNavBar';
-import { useStrava } from '../contexts/StravaContext';
+import { useStrava } from '../contexts/StravaContext'; // Use the Strava context
 
 export default function Layout() {
   const [isSidebarMinimized, setIsSidebarMinimized] = useState(false);
+
+  // Get Strava connection state and check function from context
   const { isStravaConnected, checkStravaConnection } = useStrava();
 
   return (
@@ -57,7 +59,7 @@ export default function Layout() {
           onConnect={() => console.log('Connect to Strava')}
         />
         <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <Outlet />
+          <Outlet /> {/* Renders the current page's content */}
         </main>
       </div>
     </div>
