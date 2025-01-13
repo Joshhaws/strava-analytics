@@ -1,6 +1,6 @@
-const pg = require('pg');
-const { DB_CONFIG } = require('./config.js');
+import pg from 'pg';
+import { DB_CONFIG } from './config.js';
 
 const pool = new pg.Pool(DB_CONFIG);
 
-module.exports = pool;
+export default pool;

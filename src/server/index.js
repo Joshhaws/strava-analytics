@@ -1,15 +1,15 @@
-const express = require('express');
-const cors = require('cors'); // Import CORS middleware
-const authRoutes = require('./auth');
-const stravaRoutes = require('./strava');
-const activitiesRoutes = require('./activities');
+import express from 'express';
+import cors from 'cors';
+import authRoutes from './auth.js';
+import stravaRoutes from './strava.js';
+import activitiesRoutes from './activities.js';
 
 const app = express();
 const port = 3001;
 
 // Apply CORS Middleware before defining routes
 app.use(cors({
-    origin: ['http://127.0.0.1:5173', 'http://localhost:5173'], // Allow requests from this origin
+    origin: ['http://127.0.0.1:5173', 'http://localhost:5173'],
     credentials: true // Allow cookies and authentication headers
 }));
 

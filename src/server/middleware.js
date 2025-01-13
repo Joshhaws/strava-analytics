@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = require('./config.js');
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from './config.js';
 
-function authenticateToken(req, res, next) {
+export function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -17,5 +17,3 @@ function authenticateToken(req, res, next) {
     return res.status(403).json({ message: 'Invalid token' });
   }
 }
-
-module.exports = { authenticateToken };

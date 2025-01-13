@@ -1,6 +1,6 @@
-const express = require('express');
-const pool = require('./db.js');
-const { authenticateToken } = require('./middleware.js');
+import express from 'express';
+import pool from './db.js';
+import { authenticateToken } from './middleware.js';
 
 const router = express.Router();
 
@@ -17,4 +17,4 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const pool = require('./db');  // Assuming you have a db.js file for PostgreSQL connection
-const { JWT_SECRET } = require('./config');  // Assuming you have a config.js with your JWT_SECRET
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import pool from './db.js';
+import { JWT_SECRET } from './config.js';
 
 const router = express.Router();
 
@@ -79,4 +79,4 @@ router.get('/verify', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
