@@ -4,6 +4,8 @@ import { HomeIcon, TableIcon, AnalyticsIcon, SettingsIcon } from './Icons';
 import TopNavBar from './TopNavBar';
 import { useStrava } from '../contexts/StravaContext'; // Use the Strava context
 
+
+
 export default function Layout() {
   const [isSidebarMinimized, setIsSidebarMinimized] = useState(false);
 

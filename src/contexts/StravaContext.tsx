@@ -1,20 +1,22 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+// Define the Strava context interface
 interface StravaContextProps {
   isStravaConnected: boolean;
+  setIsStravaConnected: React.Dispatch<React.SetStateAction<boolean>>;
   checkStravaConnection: () => Promise<void>;
+  resetStravaState: () => void;
+  refreshStravaState: () => Promise<void>;
 }
 
+// Create the StravaContext
 const StravaContext = createContext<StravaContextProps | undefined>(undefined);
 
+// Provider for the Strava context
 export const StravaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isStravaConnected, setIsStravaConnected] = useState(() => {
     const saved = localStorage.getItem('isStravaConnected');
-
-    // Validate and parse the saved value
-    if (saved === null || saved === "undefined") {
-      return false;
-    }
+    if (saved === null || saved === 'undefined') return false;
 
     try {
       return JSON.parse(saved);
@@ -24,7 +26,8 @@ export const StravaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   });
 
-  async function checkStravaConnection() {
+  // Check if the current user is connected to Strava
+  const checkStravaConnection = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/strava/connection', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -44,19 +47,55 @@ export const StravaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch (error) {
       console.error('Error checking Strava connection:', error);
     }
-  }
+  };
 
+  // Reset the Strava connection state
+  const resetStravaState = () => {
+    setIsStravaConnected(false);
+    localStorage.removeItem('isStravaConnected');
+  };
+
+  // Refresh the Strava connection state
+  const refreshStravaState = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/strava/connection', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to refresh Strava connection');
+      }
+
+      const data = await response.json();
+      setIsStravaConnected(data.connected);
+      localStorage.setItem('isStravaConnected', JSON.stringify(data.connected));
+    } catch (error) {
+      console.error('Error refreshing Strava connection:', error);
+      resetStravaState(); // Reset on error
+    }
+  };
+
+  // Check connection on mount
   useEffect(() => {
     checkStravaConnection();
   }, []);
 
   return (
-    <StravaContext.Provider value={{ isStravaConnected, checkStravaConnection }}>
+    <StravaContext.Provider
+      value={{
+        isStravaConnected,
+        setIsStravaConnected,
+        checkStravaConnection,
+        resetStravaState,
+        refreshStravaState,
+      }}
+    >
       {children}
     </StravaContext.Provider>
   );
 };
 
+// Hook to use the Strava context
 export const useStrava = () => {
   const context = useContext(StravaContext);
   if (!context) {
