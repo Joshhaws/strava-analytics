@@ -155,10 +155,14 @@ router.post('/callback', authenticateToken, async (req, res) => {
       ]
     );
 
+
     // Step 3: Fetch Activities from Strava API using the new token
     const activitiesResponse = await axios.get('https://www.strava.com/api/v3/athlete/activities', {
       headers: {
         Authorization: `Bearer ${tokenData.access_token}`
+      },
+      params: {
+        per_page: 200 // Maximum allowed per page
       }
     });
 
