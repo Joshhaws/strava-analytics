@@ -9,7 +9,7 @@ interface AuthResponse {
 }
 
 export async function signIn(email: string, password: string): Promise<AuthResponse> {
-  const response = await fetch('http://localhost:3001/api/auth/signin', {
+  const response = await fetch('http://localhost:8000/api/auth/signin', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export async function signIn(email: string, password: string): Promise<AuthRespo
 }
 
 export async function signUp(email: string, password: string): Promise<AuthResponse> {
-  const response = await fetch('http://localhost:3001/api/auth/signup', {
+  const response = await fetch('http://localhost:8000/api/auth/signup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export async function signUp(email: string, password: string): Promise<AuthRespo
 
 export async function verifyToken(token: string): Promise<{ userId: string } | null> {
   try {
-    const response = await fetch('http://localhost:3001/api/auth/verify', {
+    const response = await fetch('http://localhost:8000/api/auth/verify', {
       headers: {
         'Authorization': `Bearer ${token}`,
       },

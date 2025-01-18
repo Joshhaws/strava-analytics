@@ -75,7 +75,7 @@ export default function Data() {
 
   async function loadActivities() {
     try {
-      const response = await fetch('http://localhost:3001/api/activities', {
+      const response = await fetch('http://localhost:8000/api/activities/', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

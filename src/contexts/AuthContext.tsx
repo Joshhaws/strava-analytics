@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const token = localStorage.getItem('token');
     if (token) {
       // Verify token with the server
-      fetch('/api/auth/verify', {
+      fetch('http://localhost:8000/api/auth/verify', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [checkStravaConnection, setIsStravaConnected]);
 
   const handleSignIn = async (email: string, password: string) => {
-    const response = await fetch('http://localhost:3001/api/auth/signin', {
+    const response = await fetch('http://localhost:8000/api/auth/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const handleSignUp = async (email: string, password: string) => {
-    const response = await fetch('http://localhost:3001/api/auth/signup', {
+    const response = await fetch('http://localhost:8000/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const handleStravaCallback = async (code: string) => {
     // Handle Strava callback to exchange code for token
-    const response = await fetch('http://localhost:3001/api/strava/callback', {
+    const response = await fetch('http:/localhost:8000/api/strava_routes/callback', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

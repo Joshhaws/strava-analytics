@@ -29,7 +29,7 @@ export const StravaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // Check if the current user is connected to Strava
   const checkStravaConnection = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/strava/connection', {
+      const response = await fetch('http://localhost:8000/api/strava/connection', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
 
@@ -58,7 +58,7 @@ export const StravaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // Refresh the Strava connection state
   const refreshStravaState = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/strava/connection', {
+      const response = await fetch('http://localhost:8000/api/strava/connection', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
 
